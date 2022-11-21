@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { CadastroService } from './cadastro.service';
+import { Cadastro } from './cadastro.model'
 
 describe('CadastroService', () => {
   let service: CadastroService;
@@ -43,6 +44,29 @@ describe('CadastroService', () => {
     const req = httpServiceMock.expectOne(service.baseUrl);
     expect(req.request.method).toBe('GET');
     req.flush(cadastroExemplo);
+  });
+
+  it('should create a Cadastro', () => {
+    const cadastroRequest: Cadastro ={ //Simulando o formulário
+      usuario: 'teste',
+      senha: 'senha'
+    };
+
+    const cadastroResponse: Cadastro = {
+      id: 1,
+      usuario: 'teste',
+      senha: 'senha'
+    }
+
+    service.create(cadastroRequest).subscribe(cadastro =>{
+      expect(cadastro.usuario).toBe(cadastroRequest.usuario);
+      expect(cadastro.senha).toBe(cadastroRequest.senha);
+      expect(cadastro.id).toEqual(1);
+    })
+
+    const req = httpServiceMock.expectOne(service.baseUrl);
+    expect(req.request.method).toBe('POST');
+    req.flush(cadastroResponse);
   });
 
 });
