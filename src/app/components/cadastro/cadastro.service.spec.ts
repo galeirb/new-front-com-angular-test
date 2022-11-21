@@ -20,4 +20,29 @@ describe('CadastroService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should return a Cadastro list', () => {
+    const cadastroExemplo = [
+      {
+        id: 1,
+        usuario: 'teste 1',
+        senha: 'senha 1'
+      },
+      {
+        id: 2,
+        usuario: 'teste 2',
+        senha: 'senha 2'
+      }
+    ];
+
+    service.read().subscribe(cadastros => {
+      expect(cadastros.length).toBe(2);
+      expect(cadastros).toEqual(cadastroExemplo);
+    })
+
+    const req = httpServiceMock.expectOne(service.baseUrl);
+    expect(req.request.method).toBe('GET');
+    req.flush(cadastroExemplo);
+  });
+
 });
